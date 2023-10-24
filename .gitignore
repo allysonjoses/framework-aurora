@@ -396,3 +396,9 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+.DS_Store
+.idea/framework-aurora.iml
+.idea/misc.xml
+.idea/modules.xml
+.idea/.gitignore
+.idea/vcs.xml
