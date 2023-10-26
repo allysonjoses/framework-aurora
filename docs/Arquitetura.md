@@ -87,6 +87,57 @@ implementem. Isso promove um desacoplamento eficaz e facilita a manutenção e a
 
 ## Estrutura de projeto
 
-![Arquitetura Hexagonal: Estrutura de projeto adotada ](/docs/imgs/arch-4.png "Arquitetura Hexagonal: Estrutura de projeto adotada")
+![Arquitetura Hexagonal: Estrutura de projeto adotada ](/docs/imgs/solution.png "Arquitetura Hexagonal: Estrutura de projeto adotada")
 
-Continua...
+### Api
+
+Com base na imagem acima, podemos observar uma clara separação através de pastas, alinhada com os princípios da arquitetura hexagonal.
+A pasta Api receberá os Adapters do Driving Side, ou traduzindo literalmente, lado condutor, onde as ações e comandos serão originados.
+A escolha pelo nome "Api" foi adotado já que simplifica a nomenclatura em comparação a Driving ou Batman, sem perder o significado.
+
+#### O que deve ser implementado na pasta Api?
+
+Aqui teremos a exposição das funcionalidades da aplicação para os diferentes tipos de usuários. Dessa forma, conforme sua necessidade,
+você pode implementar uma API Rest, uma API GraphQL, um serviço SOAP, um Consumer de um serviço de mensageria, etc. No Framework Aurora,
+iremos focar na implementação de uma API REST e de um Consumer, tendo vista cobrir os cenários mais corriqueiros nos dias atuais.
+
+Os projetos presentes na pasta Api devem depender apenas do projeto Application, localizado na pasta Core.
+
+### Core
+
+Na pasta Core teremos a orquestração sos casos de uso, através do projeto Application, e conter as regras de negócio através do projeto Domain.
+Na Application, encontraremos os contratos dos Ports, ou seja, as interfaces que serão implementadas pelos Adapters presentes na camada de
+Infraestrutura. Além disso, nesta camada, teremos as implementações dos casos de uso que serão posteriormente expostos pela API. Em suma, a
+Application orquestrará a execução dos casos de uso utilizando os Ports "out" e as regras de negócio presentes no Domain. A Application deve depender
+apenas do projeto Domain.
+
+Nesse modelo, o Domain fica responsável por conter as regras de negócio da aplicação, ou seja, as entities, value objects, service domain, etc.
+Vale salientar que o Domain não deve conter nenhuma dependência com os demais projetos.
+
+### Infra
+
+A pasta Infra receberá os Adapters do Driven Side, ou traduzindo literalmente, lado dirigido. Seguindo a mesma lógica da pasta API,
+a escolha pelo nome "Infra" foi adotado já que simplifica a nomenclatura em comparação a Driven Side, sem perder o significado.
+
+#### O que deve ser implementado na pasta Infra?
+
+Toda e qualquer comunicação externa, seja um banco de dados, um serviço de envio de e-mails, outras aplicações, producer de mensageria,
+etc. O Framework Aurora concentrará seus esforços em fornecer implementações específicas para a comunicação com bancos de dados, sistemas
+de mensageria e integração com APIs REST.
+
+Geralmente, os projetos localizados na pasta Infra dependerão principalmente do projeto Application. No entanto, em casos especiais, podem
+também depender do projeto Domain, como por exemplo, projetos de persistência de dados, onde a manipulação do domínio é necessária para o
+mapeamento do banco de dados.
+
+![Arquitetura Hexagonal: Visão sobre as dependências ](/docs/imgs/arch-4.svg "Arquitetura Hexagonal: Visão sobre as dependências")
+
+### O maior erro que pode ser cometido
+
+É crucial garantir que nenhuma complexidade da implementação dos adapters na Api e Infra vaze para o Core. Isso implica evitar (podem
+existir exceções) dependência em bibliotecas específicas da API ou infraestrutura no núcleo, bem como impedir que os contratos de
+integração com APIs externas se tornem parte do núcleo. Um exemplo ilustrativo disso é quando uma equipe adota o desenvolvimento em
+inglês, mas consome um serviço externo que retorna dados em um formato diferente, como um JSON com propriedades em português. Essa
+separação eficaz garante que o núcleo permaneça independente e focado em sua lógica principal, sem ser afetado pelas complexidades
+das camadas periféricas.
+
+Pontuarei na implementação de referencia os pontos que evidenciam essa separação.
