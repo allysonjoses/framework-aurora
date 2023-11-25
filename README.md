@@ -27,4 +27,4 @@ Outro ponto crucial a ser destacado é que o Framework Aurora é especificamente
 Sem mais delongas, apresento o sumário inicial do Framework Aurora, o qual será aprofundado ao longo deste trabalho ainda em desenvolvimento:
 
 - [Arquitetura Hexagonal, panela velha é quem faz comida boa](/docs/Arquitetura.md)
-- Show me the Code! (Em breve)
+- [Estrutura raiz do projeto](/docs/EstruturaRaiz.md)
